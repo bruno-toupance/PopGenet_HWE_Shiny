@@ -17,7 +17,7 @@
 #==============================================================================
 
 
-library(shiny)
+library("shiny")
 
 source("PopGenet_HWE.R")
 
@@ -37,9 +37,33 @@ shinyServer(
 					compute_pop(
 						nb_AA = input$nb_AA, 
 						nb_Aa = input$nb_Aa, 
+						nb_aa = input$nb_aa
+					)
+				)
+			}
+		)
+#------------------------------------------------------------------------------
+		pop_pegas_data <- reactive(
+			{
+				return(
+					compute_pegas_pop(
+						nb_AA = input$nb_AA, 
+						nb_Aa = input$nb_Aa, 
 						nb_aa = input$nb_aa, 
 						pegas_perm_flag = input$pegas_perm_flag,
-						pegas_B = input$pegas_B,
+						pegas_B = input$pegas_B
+					)
+				)
+			}
+		)
+#------------------------------------------------------------------------------
+		pop_HardyWeinberg_data <- reactive(
+			{
+				return(
+					compute_HardyWeinberg_pop(
+						nb_AA = input$nb_AA, 
+						nb_Aa = input$nb_Aa, 
+						nb_aa = input$nb_aa, 
 						HardyWeinberg_perm_flag = input$HardyWeinberg_perm_flag,
 						HardyWeinberg_B = input$HardyWeinberg_B
 					)
@@ -91,11 +115,14 @@ output$hwe_chisq_stat_output <- renderText(
 
 output$hwe_chisq_pvalue_output <- renderText(
 	{ 
-		if (pop_data()$hwe_chisq_pvalue < 0.001) {
-			sprintf("p-value = %.2e", pop_data()$hwe_chisq_pvalue)
-		} else {
-			sprintf("p-value = %.3f", pop_data()$hwe_chisq_pvalue)
-		}
+		pvalue <- pop_data()$hwe_chisq_pvalue
+		# if (pvalue < 0.001) {
+			# pvalue_str <- sprintf("%.2e", pvalue)
+		# } else {
+			# pvalue_str <- sprintf("%.3f", pvalue)
+		# }
+		pvalue_str <- formatC(pvalue, digits = 3)
+		sprintf("p-value = %s", pvalue_str)
 	}
 )
 
@@ -103,22 +130,24 @@ output$hwe_chisq_pvalue_output <- renderText(
 
 output$pegas_exact_pvalue_output <- renderText(
 	{
-		if (pop_data()$pegas_perm_flag) {
-			p_value = pop_data()$pegas_data$hwe_exact_test[1, 4]
-			if (p_value < 0.001) {
-				sprintf("p-value = %.2e", p_value)
-			} else {
-				sprintf("p-value = %.3f", p_value)
-			}
+		if (pop_pegas_data()$pegas_perm_flag) {
+			pvalue <- pop_pegas_data()$pegas_data$hwe_exact_test[1, 4]
+			# if (pvalue < 0.001) {
+				# pvalue_str <- sprintf("%.2e", pvalue)
+			# } else {
+				# pvalue_str <- sprintf("%.3f", pvalue)
+			# }
+			pvalue_str <- formatC(pvalue, digits = 3)
 		} else {
-			sprintf("p-value = NA")
+			pvalue_str <- "NA"
 		}
+		sprintf("p-value = %s", pvalue_str)
 	}
 )
 
 output$pegas_B_output <- renderText(
 	{
-		sprintf("Number of replicates = %d", pop_data()$pegas$pegas_B) 
+		sprintf("Number of replicates = %d", pop_pegas_data()$pegas$pegas_B) 
 	}
 )
 
@@ -127,7 +156,9 @@ output$pegas_B_output <- renderText(
 
 output$HardyWeinberg_output <- renderTable(
 	{
-		pop_data()$HardyWeinberg_data 
+		HW_df <- pop_HardyWeinberg_data()$HardyWeinberg_data
+		HW_df[, 3] <- formatC(HW_df[, 3], digits = 3)
+		HW_df
 	}, 
 	digits = 3
 )

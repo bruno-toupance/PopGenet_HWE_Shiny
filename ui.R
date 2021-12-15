@@ -17,7 +17,7 @@
 #==============================================================================
 
 
-library(shiny)
+library("shiny")
 
 
 #==============================================================================
@@ -41,12 +41,6 @@ shinyUI(
 
 			wellPanel(
 				h3("Observed counts"), 
-				# numericInput(inputId = 'nb_AA', label = 'AA', value = 363),
-				# numericInput(inputId = 'nb_Aa', label = 'Aa', value = 634),
-				# numericInput(inputId = 'nb_aa', label = 'aa', value = 282)
-				# numericInput(inputId = 'nb_AA', label = 'AA', value = 9365),
-				# numericInput(inputId = 'nb_Aa', label = 'Aa', value = 2993),
-				# numericInput(inputId = 'nb_aa', label = 'aa', value = 29)
 				numericInput(inputId = 'nb_AA', label = 'AA', value = 96),
 				numericInput(inputId = 'nb_Aa', label = 'Aa', value = 190),
 				numericInput(inputId = 'nb_aa', label = 'aa', value = 143)
@@ -102,8 +96,6 @@ shinyUI(
 					
 					h3("HWE Chisq Test"), 
 					htmlOutput("hwe_table_output", container = span), 
-					# htmlOutput("hwe_chisq_stat_output", container = span), 
-					# htmlOutput("hwe_chisq_pvalue_output", container = span), 
 					textOutput("hwe_chisq_stat_output"), 
 					textOutput("hwe_chisq_pvalue_output"), 
 
