@@ -20,5 +20,5 @@ install.packages("shiny")
 ## Run from R
 ```{r }
 library("shiny")
-runGitHub(repo = "PopGenet-HWE_Shiny", username = "bruno-toupance", ref = "main")
+runGitHub(repo = "PopGenet_HWE_Shiny", username = "bruno-toupance", ref = "main")
 ```
