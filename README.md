@@ -10,10 +10,10 @@ Hardy-Weinberg Equilibrium Test + Shiny
 
 To install/update the packages, run the following commands into the R console:
 ```{r }
-install.packages("adegenet")
-install.packages("pegas")
-install.packages("HardyWeinberg")
-install.packages("shiny")
+install.packages("adegenet", dependencies = TRUE)
+install.packages("pegas", dependencies = TRUE)
+install.packages("HardyWeinberg", dependencies = TRUE)
+install.packages("shiny", dependencies = TRUE)
 ```
 
 
